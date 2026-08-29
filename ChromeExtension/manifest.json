@@ -1,0 +1,22 @@
+{
+  "manifest_version": 3,
+  "name": "Kaggle Rating Lab",
+  "version": "0.1.0",
+  "description": "Compare the per-match rating trajectories of your latest two Kaggle simulation submissions.",
+  "minimum_chrome_version": "111",
+  "permissions": ["storage"],
+  "content_scripts": [
+    {
+      "matches": ["https://www.kaggle.com/competitions/*"],
+      "js": ["bridge.js"],
+      "run_at": "document_idle",
+      "world": "MAIN"
+    },
+    {
+      "matches": ["https://www.kaggle.com/competitions/*"],
+      "js": ["content.js"],
+      "run_at": "document_idle",
+      "world": "ISOLATED"
+    }
+  ]
+}
