@@ -62,6 +62,7 @@ Studying replays is one of the best ways to improve a competition agent, but doi
 
 - Browse the competitions you have entered, with active and completed status badges and tab filtering.
 - View submissions for a competition, including each submission's real skill-rating score and episode count.
+- Compare the exact per-match rating trajectories of the latest two submissions.
 - List a submission's episodes with an automatically computed outcome (win, loss, or draw), derived from the agents' terminal rewards with zero extra fetches.
 - Bulk-download replays as JSON or ZIP, optionally filtered by outcome, with live progress streamed over a WebSocket.
 - View the current public leaderboard with a top-ten-percent cutoff, search, a "show all" toggle, and a competition selector.

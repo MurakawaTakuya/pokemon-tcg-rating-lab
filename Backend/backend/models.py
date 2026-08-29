@@ -136,8 +136,8 @@ class Submission(Base):
     # Nullable: None = count unknown (e.g. Kaggle rate-limited); a real int
     # (including 0) once confirmed. Column is already nullable in migration 001.
     episode_count: Mapped[int | None] = mapped_column(UINT, nullable=True, default=None)
-    # Cached episode list [{"id","outcome"}, ...] + last-sync time, so the UI
-    # serves episode IDs from the DB rather than hitting Kaggle on every view
+    # Cached episode list (ID, outcome, timestamps, rating values) + last-sync
+    # time, so the UI serves episode IDs from the DB rather than hitting Kaggle
     # (rate-limit-safe). Populated by the daily scheduler / manual "Sync now".
     episodes_json: Mapped[list | None] = mapped_column(JSON, nullable=True, default=None)
     episodes_synced_at: Mapped[dt.datetime | None] = mapped_column(DateTime, nullable=True)

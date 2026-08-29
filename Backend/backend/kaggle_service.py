@@ -298,6 +298,36 @@ def latest_skill_rating(episodes: list[dict], submission_id) -> float | None:
     return None
 
 
+def episode_rating_point(episode: dict, submission_id) -> dict:
+    """Return the cached UI representation for one simulation episode.
+
+    Kaggle's internal ``ListEpisodes`` response includes the submitting agent's
+    rating immediately before and after the match. Persist those values with
+    the already cached outcome so the frontend can render a trajectory without
+    another Kaggle request.
+    """
+    sid = str(submission_id)
+    agent = next(
+        (a for a in (episode.get("agents") or []) if str(a.get("submissionId")) == sid),
+        None,
+    )
+    initial_score = _to_float_score(agent.get("initialScore")) if agent else None
+    updated_score = _to_float_score(agent.get("updatedScore")) if agent else None
+    rating_delta = None
+    if initial_score is not None and updated_score is not None:
+        rating_delta = updated_score - initial_score
+
+    return {
+        "id": str(episode.get("id")),
+        "outcome": episode_outcome(episode, submission_id),
+        "created_at": episode.get("createTime") or episode.get("create_time"),
+        "ended_at": episode.get("endTime") or episode.get("end_time"),
+        "initial_score": initial_score,
+        "updated_score": updated_score,
+        "rating_delta": rating_delta,
+    }
+
+
 async def fetch_submission_episode_data(page, tokens, submission_id: str) -> dict:
     """Fetch a submission's episodes ONCE and derive everything the UI caches.
 
@@ -309,10 +339,7 @@ async def fetch_submission_episode_data(page, tokens, submission_id: str) -> dic
     episodes, error = await list_episodes_checked(page, tokens, submission_id)
     if error is not None:
         return {"episodes": [], "count": -1, "score": None, "error": error}
-    items = [
-        {"id": str(ep.get("id")), "outcome": episode_outcome(ep, submission_id)}
-        for ep in episodes
-    ]
+    items = [episode_rating_point(ep, submission_id) for ep in episodes]
     return {
         "episodes": items,
         "count": len(items),

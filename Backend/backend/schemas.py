@@ -105,6 +105,7 @@ class SubmissionItem(_ORMModel):
     """A single submission in a list response."""
 
     id: int
+    kaggle_id: str
     title: str
     score: float | None = None
     episode_count: int | None = None  # None = unknown (e.g. rate-limited); 0 = confirmed empty
@@ -125,6 +126,11 @@ class EpisodeItem(BaseModel):
 
     id: str
     outcome: Literal["win", "lose", "draw", "unknown"] = "unknown"
+    created_at: str | None = None
+    ended_at: str | None = None
+    initial_score: float | None = None
+    updated_score: float | None = None
+    rating_delta: float | None = None
 
 
 class EpisodeListResponse(BaseModel):

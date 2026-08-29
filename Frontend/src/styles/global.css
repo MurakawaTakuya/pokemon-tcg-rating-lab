@@ -446,6 +446,96 @@ button { font-family: inherit; }
 }
 .data-table-rowwrap:hover { background: var(--bg-overlay); }
 
+/* Latest-two rating comparison */
+.rating-comparison {
+  padding: clamp(18px, 3vw, 28px);
+  margin-bottom: 20px;
+  overflow: hidden;
+}
+.rating-comparison-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 20px;
+}
+.rating-comparison-header h2 { font-size: clamp(1.25rem, 2.4vw, 1.7rem); }
+.rating-comparison-header p {
+  margin: 6px 0 0;
+  color: var(--text-muted);
+  font-size: 0.88rem;
+}
+.rating-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--accent-cyan);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  margin-bottom: 6px;
+  text-transform: uppercase;
+}
+.rating-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-bottom: 20px;
+}
+.rating-summary-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: 13px;
+  padding: 16px;
+  min-width: 0;
+}
+.rating-series-label {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+}
+.rating-series-label > span:first-child {
+  width: 9px;
+  height: 9px;
+  border-radius: 999px;
+}
+.rating-summary-card strong {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: clamp(1.7rem, 4vw, 2.45rem);
+  line-height: 1;
+  margin-right: 10px;
+}
+.rating-summary-card h3 {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: var(--font-body);
+  font-size: 0.92rem;
+  margin-top: 12px;
+}
+.rating-summary-card small { color: var(--text-faint); }
+.rating-up, .rating-down { font-size: 0.78rem; font-weight: 600; }
+.rating-up { color: var(--accent-green); }
+.rating-down { color: var(--accent-red); }
+.rating-chart { width: 100%; height: 320px; }
+.rating-loading { padding: 24px 0; }
+.rating-empty {
+  min-height: 140px;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+@media (max-width: 720px) {
+  .rating-comparison-header { flex-direction: column; }
+  .rating-summary-grid { grid-template-columns: 1fr; }
+  .rating-chart { height: 280px; }
+}
+
 /* Shimmer skeleton — light warm tones (visible on ivory). */
 @keyframes shimmer {
   0%   { background-position: -200% 0; }

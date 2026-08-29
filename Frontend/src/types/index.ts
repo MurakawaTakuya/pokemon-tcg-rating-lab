@@ -23,6 +23,7 @@ export interface Competition {
 
 export interface Submission {
   id: number
+  kaggle_id: string
   title: string
   score: number | null
   fetched_at: string
@@ -35,6 +36,11 @@ export interface Submission {
 export interface Episode {
   id: string
   outcome: 'win' | 'lose' | 'draw' | 'unknown'
+  created_at: string | null
+  ended_at: string | null
+  initial_score: number | null
+  updated_score: number | null
+  rating_delta: number | null
 }
 
 export interface DownloadJob {

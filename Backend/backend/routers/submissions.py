@@ -50,7 +50,7 @@ async def get_episodes(
         outcome = ep.get("outcome", "unknown")
         if filter != "all" and outcome != filter:
             continue
-        items.append(EpisodeItem(id=str(ep.get("id")), outcome=outcome))
+        items.append(EpisodeItem.model_validate(ep))
 
     note = None if filter == "all" else "Outcome data is derived from agent rewards and may be approximate."
     return EpisodeListResponse(episodes=items, total=len(items), filter_applied=filter, note=note)

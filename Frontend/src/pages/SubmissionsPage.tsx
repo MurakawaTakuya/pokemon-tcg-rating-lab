@@ -8,6 +8,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { getSubmissions, syncCompetitionData } from '@/api/endpoints'
 import { useToast } from '@/components/shared/ToastProvider'
 import { SubmissionTable } from '@/components/submissions/SubmissionTable'
+import { RatingComparison } from '@/components/submissions/RatingComparison'
 import { LastSynced } from '@/components/shared/LastSynced'
 import { useDownloadStore } from '@/store/downloadStore'
 import { ArrowLeftIcon, TrophyIcon, TargetIcon } from '@/components/shared/icons'
@@ -130,6 +131,11 @@ export function SubmissionsPage(): JSX.Element {
       <div style={{ marginBottom: 16 }}>
         <LastSynced at={syncedAt} />
       </div>
+      <RatingComparison
+        submissions={submissions}
+        loading={loading}
+        refreshKey={reloadKey}
+      />
       <SubmissionTable
         submissions={submissions}
         loading={loading}

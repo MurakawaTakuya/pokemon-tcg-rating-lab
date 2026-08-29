@@ -182,7 +182,7 @@ async def resolve_episode_data(user_id: int, competition_id: int, force: bool = 
     """Background task: fetch each submission's episodes ONCE and cache the result.
 
     For each submission this stores (in the DB, the source of truth for the UI):
-    ``episode_count``, ``episodes_json`` (``[{"id","outcome"}, ...]``),
+    ``episode_count``, ``episodes_json`` (IDs, outcomes, timestamps, ratings),
     ``episodes_synced_at``, and the real ``score`` (the latest-episode skill
     rating — fixes the "score shows 0" bug for simulation submissions).
 
@@ -251,7 +251,7 @@ async def full_resync(user_id: int, competition_id: int) -> None:
 
 
 async def get_submission_episodes(db: AsyncSession, user_id: int, submission: Submission) -> list[dict]:
-    """Return a submission's episodes as ``[{"id","outcome"}, ...]``, cache-first.
+    """Return a submission's cached episode outcomes and rating points.
 
     Serves the persisted ``episodes_json`` (populated by the daily scheduler, a
     manual "Sync now", or the first-load resolver) so navigating the app never
