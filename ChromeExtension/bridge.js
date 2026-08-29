@@ -4,6 +4,7 @@
     competitions: '/api/i/competitions.CompetitionService/ListCompetitions',
     submissions: '/api/i/competitions.SubmissionService/ListSubmissions',
     episodes: '/api/i/competitions.EpisodeService/ListEpisodes',
+    leaderboard: '/api/i/competitions.LeaderboardService/GetLeaderboard',
   }
 
   function cookie(name) {
