@@ -86,6 +86,7 @@ Thumbs.db
 **/.obsidian/
 # Local agent/editor tooling config (machine-specific; may contain local paths)
 .claude/
+.codebase-memory/
 
 # ============================================================================
 # Internal working notes (kept out of the public repository)
