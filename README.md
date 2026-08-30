@@ -1,5 +1,7 @@
 # PTCG AI Battle Rating Lab
 
+<img width="500" alt="image" src="https://github.com/user-attachments/assets/9a1c3d3e-6c2b-4e2a-b77a-bb37f4fb7bd7" />
+
 [The Pokémon Company - PTCG AI Battle Challenge Simulation](https://www.kaggle.com/competitions/pokemon-tcg-ai-battle) のレート推移を、Kaggleのコンペ画面上で確認するための非公式Chrome拡張です。
 
 最新2件の提出を比較し、試合ごとのレート推移、勝敗、平均レート、メダルボーダー、ランキング分布をサイドパネルにまとめて表示します。
