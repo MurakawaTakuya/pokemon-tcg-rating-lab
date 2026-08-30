@@ -14,6 +14,7 @@
 ## 主な機能
 
 - 最新2件の提出を `Submission #1` と `Submission #2` として匿名表示
+- ログイン中ユーザーの現在のチーム順位とLeaderboard score
 - 各提出の現在レート、勝敗数、平均値、最小値、最大値
 - 最大1,000試合分のレート推移グラフ
 - Gold / Silver / Bronzeの現在のボーダー
@@ -56,6 +57,8 @@ Python、Node.js、Playwright、MySQL、`auth.json`、Kaggle API tokenは不要�
 4. 必要に応じて右上の更新ボタンを押します。
 
 `Submission #1` が最新の提出、`Submission #2` がその1つ前の提出です。実際のsubmission IDは画面に表示しません。
+
+左端の `Your rank` は、対象コンペで取得した自分のteam IDと現在のLeaderboardを動的に照合したチーム順位です。team IDとteam名は画面に表示しません。
 
 ### Focus / All
 

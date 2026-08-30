@@ -1,6 +1,6 @@
 (() => {
   const SOURCE = 'kaggle-rating-lab'
-  const CACHE_VERSION = 5
+  const CACHE_VERSION = 6
   const pending = new Map()
   let activeSlug = competitionSlug()
   let currentData = null
@@ -124,7 +124,7 @@
       .krl-retry { margin-top: 16px; padding: 9px 14px; color: #fff; border: 0; border-radius: 10px; background: #6d5ce7; cursor: pointer; font-weight: 700; }
       .krl-section-label { display: flex; align-items: center; justify-content: space-between; margin: 0 1px 10px; color: #8995ad; font-size: 10px; font-weight: 800; letter-spacing: .11em; text-transform: uppercase; }
       .krl-updated { font-weight: 500; letter-spacing: 0; text-transform: none; }
-      .krl-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+      .krl-cards { display: grid; grid-template-columns: minmax(138px, .62fr) repeat(2, minmax(0, 1fr)); gap: 10px; }
       .krl-card { position: relative; min-width: 0; padding: 14px; overflow: hidden; border: 1px solid rgba(148,163,184,.13); border-radius: 15px; background: rgba(255,255,255,.035); }
       .krl-card::after { content: ''; position: absolute; width: 80px; height: 80px; top: -42px; right: -30px; border-radius: 50%; background: var(--series); filter: blur(28px); opacity: .24; }
       .krl-card-id { display: flex; align-items: center; gap: 7px; color: #aab5ca; font: 650 10px/1 ui-monospace, SFMono-Regular, Menlo, monospace; }
@@ -193,6 +193,8 @@
         .krl-panel { inset: 0; width: 100vw; border-radius: 0; }
         .krl-launcher { right: 14px; bottom: 14px; }
         .krl-body { padding-inline: 14px; }
+        .krl-cards { grid-template-columns: 1fr 1fr; }
+        .krl-rank-card { grid-column: 1 / -1; }
       }
       @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition: none !important; animation: none !important; } }
     </style>
@@ -334,6 +336,7 @@
     }
     let medals = []
     let leaderboardEntries = []
+    let teamStanding = null
     try {
       const leaderboard = await request('leaderboard', {
         competitionId: Number(competition.id),
@@ -341,6 +344,15 @@
       })
       const leaderboardRows = leaderboard.publicLeaderboard ?? []
       medals = medalBoundaries(leaderboardRows)
+      const ownRowIndex = leaderboardRows.findIndex((row) => String(row.teamId) === String(team.id))
+      if (ownRowIndex >= 0) {
+        const ownRow = leaderboardRows[ownRowIndex]
+        teamStanding = {
+          rank: number(ownRow.rank) ?? ownRowIndex + 1,
+          score: number(ownRow.displayScore ?? ownRow.score),
+          teamCount: leaderboardRows.length,
+        }
+      }
       leaderboardEntries = leaderboardRows
         .map((row, index) => ({
           score: number(row.displayScore ?? row.score),
@@ -357,6 +369,7 @@
       series,
       medals,
       leaderboardEntries,
+      teamStanding,
     }
   }
 
@@ -674,6 +687,15 @@
   function render(data) {
     const colors = ['#9b7cff', '#2dd4bf']
     const updated = new Date(data.loadedAt).toLocaleString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })
+    const teamRank = number(data.teamStanding?.rank)
+    const teamCount = number(data.teamStanding?.teamCount)
+    const teamScore = number(data.teamStanding?.score)
+    const rankCard = `<article class="krl-card krl-rank-card" style="--series:#fbbf24">
+      <div class="krl-card-id"><i class="krl-dot"></i>Your rank</div>
+      <div class="krl-score">${teamRank === null ? '—' : `#${teamRank.toLocaleString()}`}</div>
+      <div class="krl-card-title">${teamCount === null ? 'Current leaderboard' : `of ${teamCount.toLocaleString()} teams`}</div>
+      <div class="krl-meta">${teamScore === null ? 'Rank unavailable' : `${formatScore(teamScore)} leaderboard rating`}</div>
+    </article>`
     const cards = data.series.map((item, index) => {
       return `<article class="krl-card" style="--series:${colors[index]}">
         <div class="krl-card-id"><i class="krl-dot"></i>${submissionLabel(index)}</div>
@@ -691,8 +713,8 @@
     }))).sort((a, b) => b.time - a.time).slice(0, 7)
 
     body.innerHTML = `
-      <div class="krl-section-label"><span>Latest submissions</span><span class="krl-updated">Updated ${escapeHtml(updated)}</span></div>
-      <div class="krl-cards">${cards}</div>
+      <div class="krl-section-label"><span>Standing & latest submissions</span><span class="krl-updated">Updated ${escapeHtml(updated)}</span></div>
+      <div class="krl-cards">${rankCard}${cards}</div>
       <section class="krl-chart-card">
         <div class="krl-chart-head"><div><strong>Skill rating</strong><span>Match progression${data.leaderboardEntries?.length ? ` · ${data.leaderboardEntries.length} ranked teams` : ''}</span></div><div class="krl-legend">${data.series.map((_, index) => `<span><i style="--series:${colors[index]}"></i>${submissionLabel(index)}</span>`).join('')}${data.leaderboardEntries?.length ? '<span><i style="--series:#64748b"></i>Ranking</span>' : ''}</div></div>
         <div class="krl-chart-toolbar"><div class="krl-range-toggle" role="group" aria-label="Chart rating range"><button type="button" data-chart-mode="focus" class="${chartMode === 'focus' ? 'active' : ''}" aria-pressed="${chartMode === 'focus'}">Focus</button><button type="button" data-chart-mode="all" class="${chartMode === 'all' ? 'active' : ''}" aria-pressed="${chartMode === 'all'}">All</button></div></div>
