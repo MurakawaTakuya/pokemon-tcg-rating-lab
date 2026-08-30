@@ -132,6 +132,11 @@
       .krl-score { position: relative; z-index: 1; margin-top: 10px; color: #fff; font-size: 27px; font-weight: 780; letter-spacing: -.04em; }
       .krl-positive { color: #5eead4; } .krl-negative { color: #fda4af; } .krl-neutral { color: #94a3b8; }
       .krl-card-title { margin-top: 5px; overflow: hidden; color: #c8d1e2; font-size: 11px; font-weight: 620; text-overflow: ellipsis; white-space: nowrap; }
+      .krl-medal-status { position: relative; z-index: 1; display: inline-flex; width: max-content; max-width: 100%; margin-top: 9px; padding: 4px 7px; border: 1px solid currentColor; border-radius: 7px; font-size: 9px; font-weight: 800; }
+      .krl-medal-gold { color: #fbbf24; background: rgba(251,191,36,.09); }
+      .krl-medal-silver { color: #cbd5e1; background: rgba(203,213,225,.08); }
+      .krl-medal-bronze { color: #d97706; background: rgba(217,119,6,.09); }
+      .krl-medal-none { color: #8491aa; background: rgba(132,145,170,.07); }
       .krl-record { display: flex; align-items: center; gap: 6px; margin-top: 9px; }
       .krl-record span { padding: 4px 7px; border: 1px solid rgba(148,163,184,.12); border-radius: 7px; background: rgba(255,255,255,.035); color: #93a0b7; font-size: 9px; font-weight: 700; }
       .krl-record b { margin-right: 3px; font-size: 9px; }
@@ -386,6 +391,30 @@
         .sort((a, b) => b.rank - a.rank)
       return matching.length ? [{ name, rank: matching[0].rank, score: matching[0].score }] : []
     })
+  }
+
+  function teamMedalStatus(standing, medals) {
+    const rank = number(standing?.rank)
+    const score = number(standing?.score)
+    const boundaries = Object.fromEntries(medals.map((medal) => [medal.name, medal]))
+    let current = 'none'
+    if (rank !== null && boundaries.gold && rank <= boundaries.gold.rank) current = 'gold'
+    else if (rank !== null && boundaries.silver && rank <= boundaries.silver.rank) current = 'silver'
+    else if (rank !== null && boundaries.bronze && rank <= boundaries.bronze.rank) current = 'bronze'
+
+    const labels = { gold: 'Gold', silver: 'Silver', bronze: 'Bronze' }
+    const nextName = { none: 'bronze', bronze: 'silver', silver: 'gold', gold: null }[current]
+    const nextBoundary = nextName ? boundaries[nextName] : null
+    const gap = nextBoundary && score !== null ? Math.max(0, nextBoundary.score - score) : null
+    return {
+      current,
+      label: current === 'none' ? 'No medal' : `${labels[current]} medal`,
+      detail: current === 'gold'
+        ? 'Top medal tier'
+        : nextBoundary && gap !== null
+          ? `${formatScore(gap)} to ${labels[nextName]}`
+          : 'Next boundary unavailable',
+    }
   }
 
   function normalizeMedal(value) {
@@ -690,10 +719,13 @@
     const teamRank = number(data.teamStanding?.rank)
     const teamCount = number(data.teamStanding?.teamCount)
     const teamScore = number(data.teamStanding?.score)
+    const medalStatus = teamMedalStatus(data.teamStanding, data.medals ?? [])
     const rankCard = `<article class="krl-card krl-rank-card" style="--series:#fbbf24">
       <div class="krl-card-id"><i class="krl-dot"></i>Your rank</div>
       <div class="krl-score">${teamRank === null ? '—' : `#${teamRank.toLocaleString()}`}</div>
       <div class="krl-card-title">${teamCount === null ? 'Current leaderboard' : `of ${teamCount.toLocaleString()} teams`}</div>
+      <div class="krl-medal-status krl-medal-${medalStatus.current}">${medalStatus.label}</div>
+      <div class="krl-meta">${medalStatus.detail}</div>
       <div class="krl-meta">${teamScore === null ? 'Rank unavailable' : `${formatScore(teamScore)} leaderboard rating`}</div>
     </article>`
     const cards = data.series.map((item, index) => {

@@ -16,7 +16,7 @@ Python、Node.js、Playwright、MySQL、`auth.json`、Kaggle API tokenは不要�
 ## 動作
 
 - 最新2件を `Submission #1` / `Submission #2` として表示します。
-- 自分のteam IDとLeaderboardを動的に照合し、現在のチーム順位を表示します。
+- 自分のteam IDとLeaderboardを動的に照合し、現在のチーム順位、メダル圏、次のボーダーまでのレート差を表示します。
 - 初回はコンペ、提出2件のepisode、Leaderboardを順番に取得します。
 - レート推移、勝敗、平均値、メダルボーダー、ランキング分布を表示します。
 - 取得結果は `chrome.storage.local` にキャッシュします。
