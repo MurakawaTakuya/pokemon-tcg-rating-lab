@@ -1,5 +1,5 @@
 (() => {
-  const SOURCE = 'kaggle-rating-lab'
+  const SOURCE = 'pokemon-tcg-rating-lab'
   const endpoints = {
     competitions: '/api/i/competitions.CompetitionService/ListCompetitions',
     submissions: '/api/i/competitions.SubmissionService/ListSubmissions',

@@ -1,5 +1,6 @@
 (() => {
-  const SOURCE = 'kaggle-rating-lab'
+  const SOURCE = 'pokemon-tcg-rating-lab'
+  const TARGET_SLUG = 'pokemon-tcg-ai-battle'
   const CACHE_VERSION = 6
   const pending = new Map()
   let activeSlug = competitionSlug()
@@ -8,7 +9,8 @@
   let chartMode = 'focus'
 
   function competitionSlug() {
-    return location.pathname.match(/^\/competitions\/([^/]+)/)?.[1] ?? null
+    const slug = location.pathname.match(/^\/competitions\/([^/]+)/)?.[1] ?? null
+    return slug === TARGET_SLUG ? slug : null
   }
 
   function escapeHtml(value) {
@@ -63,7 +65,7 @@
   })
 
   const host = document.createElement('div')
-  host.id = 'kaggle-rating-lab-root'
+  host.id = 'pokemon-tcg-rating-lab-root'
   const shadow = host.attachShadow({ mode: 'open' })
   shadow.innerHTML = `
     <style>

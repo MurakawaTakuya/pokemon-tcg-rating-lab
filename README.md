@@ -42,8 +42,8 @@ Python、Node.js、Playwright、MySQL、`auth.json`、Kaggle API tokenは不要�
 1. リポジトリをcloneします。
 
    ```bash
-   git clone https://github.com/MurakawaTakuya/kaggle-rating-lab.git
-   cd kaggle-rating-lab
+   git clone https://github.com/MurakawaTakuya/pokemon-tcg-rating-lab.git
+   cd pokemon-tcg-rating-lab
    ```
 
 2. Chromeで `chrome://extensions` を開きます。

@@ -1,19 +1,19 @@
 {
   "manifest_version": 3,
-  "name": "Kaggle Rating Lab",
+  "name": "Pokémon TCG Rating Lab",
   "version": "0.1.0",
-  "description": "Compare the per-match rating trajectories of your latest two Kaggle simulation submissions.",
+  "description": "Compare the per-match rating trajectories of your latest two submissions to the Pokémon TCG AI Battle Challenge Simulation Kaggle competition.",
   "minimum_chrome_version": "111",
   "permissions": ["storage"],
   "content_scripts": [
     {
-      "matches": ["https://www.kaggle.com/competitions/*"],
+      "matches": ["https://www.kaggle.com/competitions/pokemon-tcg-ai-battle*"],
       "js": ["bridge.js"],
       "run_at": "document_idle",
       "world": "MAIN"
     },
     {
-      "matches": ["https://www.kaggle.com/competitions/*"],
+      "matches": ["https://www.kaggle.com/competitions/pokemon-tcg-ai-battle*"],
       "js": ["content.js"],
       "run_at": "document_idle",
       "world": "ISOLATED"
